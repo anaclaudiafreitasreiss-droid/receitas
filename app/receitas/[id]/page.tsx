@@ -7,20 +7,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface RecipePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  }
+  }>;
 }
 
-export default function ReceitaPage({ params }: RecipePageProps) {
-  const recipe = recipes.find((recipe) => recipe.id === params.id)
+export default async function ReceitaPage({ params }: RecipePageProps) {
+  const { id } = await params;
+
+  const recipe = recipes.find((recipe) => recipe.id === id);
 
   if (!recipe) {
     return notFound()
   }
 
   return (
-    <main className="flex-grow py-8">
+    <main className="grow py-8">
       <div className="container mx-auto">
         <Link className="flex text-orange-500 hover:text-orange-700 mb-6" href="/receitas">
           <ChevronLeft />
