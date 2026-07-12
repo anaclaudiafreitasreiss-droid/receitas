@@ -2,20 +2,30 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="w-full bg-white text-black py-4 border-b border-slate-200 drop-shadow-lg">
-      <div className="flex justify-between container mx-auto">
-        <Link className="text-xl font-bold hover:scale-105 transition-all" href="/">Receitas deliciosas</Link>
+    <header style={{ background: "white", padding: "20px", borderBottom: "1px solid #ccc" }}>
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Link href="/" style={{ color: "black", fontWeight: "bold", fontSize: "24px" }}>
+          Receitas deliciosas
+        </Link>
 
-        <nav className="flex gap-6">
-          <Link className="hover:text-orange-500 transition-colors" href="/">
+        <div style={{ display: "flex", gap: "20px" }}>
+          <Link href="/" style={{ color: "black" }}>
             Início
           </Link>
 
-          <Link className="hover:text-orange-500 transition-colors" href="/receitas">
+          <Link href="/receitas" style={{ color: "black" }}>
             Receitas
           </Link>
-        </nav>
+        </div>
       </div>
     </header>
-  )
+  );
 }
