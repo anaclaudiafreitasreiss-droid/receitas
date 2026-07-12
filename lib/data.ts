@@ -2,6 +2,8 @@ export type Recipe = {
   id: string;
   title: string;
   description: string;
+<<<<<<< HEAD
+=======
     image: string;
     prepTime: string
     cookTime: string
@@ -17,6 +19,7 @@ export type recipes = {
   id: string;
   title: string;
   description: string;
+>>>>>>> b660d1d9c0cf565d7a4a3f0b483f31e3999c2ea1
   image: string;
   prepTime: string
   cookTime: string

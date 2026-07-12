@@ -70,7 +70,7 @@ export default function ReceitasPage() {
   };
 
   return (
-    <main className="flex-grow py-8">
+    <main className="grow py-8">
       <div className="container mx-auto">
         <div className="flex justify-between w-full">
           <h1 className="text-3xl font-bold">Todas as receitas</h1>
