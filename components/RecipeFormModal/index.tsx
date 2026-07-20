@@ -94,11 +94,11 @@ export default function RecipeFormModal({
     onClose();
   };
 
-  const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow w-full";
+ const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow w-full bg-white text-black";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white min-w-2xl max-h-[90dvh] overflow-y-scroll">
+      <DialogContent className="bg-white text-black min-w-2xl max-h-[90dvh] overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>
             {mode === "create" ? "Nova receita" : "Editar receita"}
@@ -112,7 +112,7 @@ export default function RecipeFormModal({
           <div className="grid grid-cols-2 gap-2">
             {/* Titulo */}
             <div className="flex flex-col gap-1">
-              <label htmlFor="title">Título</label>
+              <label htmlFor="title" className="text-black font-medium">Título</label>
               <input
                 className={inputStyle}
                 type="text"
