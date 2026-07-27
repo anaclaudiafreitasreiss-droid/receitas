@@ -1,22 +1,30 @@
 "use client";
 
+"use client";
+
 import DeleteConfirmationModal from "@/components/DeleteConfirmationModal";
 import RecipeCard from "@/components/RecipeCard";
 import RecipeFormModal from "@/components/RecipeFormModal";
-import { recipes as initialRecipes } from "@/lib/data";
 import type { Recipe } from "@/lib/data";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ReceitasPage() {
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] =
     useState(false);
-  const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
+
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | undefined>(
     undefined
   );
+
+  useEffect(() => {
+    fetch("http://localhost:3001/recipes")
+      .then((response) => response.json())
+      .then((data) => setRecipes(data));
+  }, []);
 
   const handleOpenCreateModal = () => {
     setModalMode("create");
@@ -40,16 +48,18 @@ export default function ReceitasPage() {
         ...recipeData,
         id: (recipes.length + 1).toString(),
       };
+
       setRecipes((prev) => [...prev, newRecipe]);
     } else {
-      // modo "edit"
       const updatedRecipe = recipeData as Recipe;
+
       setRecipes((prev) =>
         prev.map((recipe) =>
           recipe.id === updatedRecipe.id ? updatedRecipe : recipe
         )
       );
     }
+
     handleCloseModal();
   };
 
