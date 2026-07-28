@@ -1,25 +1,28 @@
 import InfoPill from "@/components/InfoPill";
 import PreparationStep from "@/components/PreparationStep";
-import { recipes } from "@/lib/data";
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface RecipePageProps {
+interface Props {
   params: Promise<{
     id: string;
   }>;
 }
 
-export default async function ReceitaPage({ params }: RecipePageProps) {
+export default async function ReceitaPage({ params }: Props) {
   const { id } = await params;
 
-  const recipe = recipes.find((recipe) => recipe.id === id);
+  const response = await fetch(`http://localhost:3001/recipes/${id}`, {
+    cache: "no-store",
+  });
 
-  if (!recipe) {
-    return notFound()
+  if (!response.ok) {
+    notFound();
   }
+
+  const recipe = await response.json();
 
   return (
     <main className="grow py-8">
