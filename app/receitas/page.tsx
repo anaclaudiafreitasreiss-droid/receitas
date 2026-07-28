@@ -87,16 +87,20 @@ export default function ReceitasPage() {
     setIsDeleteConfirmationModalOpen(true);
   };
 
-  const handleDeleteRecipe = () => {
-    if (selectedRecipe) {
-      setRecipes((prev) =>
-        prev.filter((recipe) => recipe.id !== selectedRecipe.id)
-      );
+  const handleDeleteRecipe = async () => {
+  if (!selectedRecipe) return;
 
-      setIsDeleteConfirmationModalOpen(false);
-      setSelectedRecipe(undefined);
-    }
-  };
+  await fetch(`http://localhost:3001/recipes/${selectedRecipe.id}`, {
+    method: "DELETE",
+  });
+
+  setRecipes((prev) =>
+    prev.filter((recipe) => recipe.id !== selectedRecipe.id)
+  );
+
+  setIsDeleteConfirmationModalOpen(false);
+  setSelectedRecipe(undefined);
+};
 
   return (
     <main className="grow py-8">
