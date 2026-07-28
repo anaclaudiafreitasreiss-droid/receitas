@@ -34,24 +34,44 @@ export default function ReceitasPage() {
     setIsRecipeModalOpen(false);
   };
 
-  const handleSaveRecipe = (recipeData: Omit<Recipe, "id"> | Recipe) => {
-    if (modalMode === "create") {
-      const newRecipe: Recipe = {
-        ...recipeData,
-        id: (recipes.length + 1).toString(),
-      };
-      setRecipes((prev) => [...prev, newRecipe]);
-    } else {
-      // modo "edit"
-      const updatedRecipe = recipeData as Recipe;
-      setRecipes((prev) =>
-        prev.map((recipe) =>
-          recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-        )
-      );
-    }
-    handleCloseModal();
-  };
+  const handleSaveRecipe = async (recipeData: Omit<Recipe, "id"> | Recipe) => {
+  if (modalMode === "create") {
+    const response = await fetch("http://localhost:3001/recipes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recipeData),
+    });
+
+    const newRecipe = await response.json();
+
+    setRecipes((prev) => [...prev, newRecipe]);
+  } else {
+    const updatedRecipe = recipeData as Recipe;
+
+    const response = await fetch(
+      `http://localhost:3001/recipes/${updatedRecipe.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedRecipe),
+      }
+    );
+
+    const recipeUpdated = await response.json();
+
+    setRecipes((prev) =>
+      prev.map((recipe) =>
+        recipe.id === recipeUpdated.id ? recipeUpdated : recipe
+      )
+    );
+  }
+
+  handleCloseModal();
+};
 
   const handleOpenDeleteConfirmationModal = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
@@ -70,7 +90,7 @@ export default function ReceitasPage() {
   };
 
   return (
-    <main className="flex-grow py-8">
+    <main className="grow py-8">
       <div className="container mx-auto">
         <div className="flex justify-between w-full">
           <h1 className="text-3xl font-bold">Todas as receitas</h1>
