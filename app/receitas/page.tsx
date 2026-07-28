@@ -42,26 +42,45 @@ export default function ReceitasPage() {
     setIsRecipeModalOpen(false);
   };
 
-  const handleSaveRecipe = (recipeData: Omit<Recipe, "id"> | Recipe) => {
-    if (modalMode === "create") {
-      const newRecipe: Recipe = {
-        ...recipeData,
-        id: (recipes.length + 1).toString(),
-      };
+  const handleSaveRecipe = async (recipeData: Omit<Recipe, "id"> | Recipe) => {
+  if (modalMode === "create") {
+    const response = await fetch("http://localhost:3001/recipes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recipeData),
+    });
 
-      setRecipes((prev) => [...prev, newRecipe]);
-    } else {
-      const updatedRecipe = recipeData as Recipe;
+    const newRecipe = await response.json();
 
-      setRecipes((prev) =>
-        prev.map((recipe) =>
-          recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-        )
-      );
-    }
+    setRecipes((prev) => [...prev, newRecipe]);
+  } else {
+    const updatedRecipe = recipeData as Recipe;
 
-    handleCloseModal();
-  };
+    const response = await fetch(
+      `http://localhost:3001/recipes/${updatedRecipe.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedRecipe),
+      }
+    );
+
+    const recipeUpdated = await response.json();
+
+    setRecipes((prev) =>
+      prev.map((recipe) =>
+        recipe.id === recipeUpdated.id ? recipeUpdated : recipe
+      )
+    );
+  }
+
+  handleCloseModal();
+};
+
 
   const handleOpenDeleteConfirmationModal = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
